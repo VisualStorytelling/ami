@@ -1,4 +1,5 @@
 import shadersInterpolation from './interpolation/shaders.interpolation';
+import shadersColormap from './colormap/shaders.colormap';
 
 export default class ShadersFragment {
   // pass uniforms object
@@ -40,7 +41,7 @@ export default class ShadersFragment {
 
   main() {
     // need to pre-call main to fill up the functions list
-    this._main = `
+    this._main = `  
 void main(void) {
 
   // draw border if slice is cropped
@@ -68,6 +69,7 @@ void main(void) {
 
   // get texture coordinates of current pixel
   vec4 dataValue = vec4(0.);
+
   vec3 gradient = vec3(1.); // gradient calculations will be skipped if it is equal to vec3(1.) 
   float steps = floor(uThickness / uSpacing + 0.5);
 
@@ -111,7 +113,7 @@ void main(void) {
   if(uNumberOfChannels == 1){
     // rescale/slope
     float realIntensity = dataValue.r * uRescaleSlopeIntercept[0] + uRescaleSlopeIntercept[1];
-  
+      
     // threshold
     if (realIntensity < uLowerUpperThreshold[0] || realIntensity > uLowerUpperThreshold[1]) {
       discard;
@@ -159,10 +161,24 @@ void main(void) {
   if(uInvert == 1){
     dataValue.xyz = vec3(1.) - dataValue.xyz;
   }
+  
+  // Rescale color range between thresholds
+  float tMax = 1426.0;
+  float tUpper = float(uLowerUpperThreshold[1]) / tMax;
+  float tLower = float(uLowerUpperThreshold[0]) / tMax;  
+  float tRange = tUpper - tLower;
+  float tMul = 1.0 / tRange;
 
-  dataValue.a = dataValue.a*uOpacity;
-
-  gl_FragColor = dataValue;
+  vec4 color = vec4(1.);  
+  ${shadersColormap(this, 'dataValue.r', 'tLower', 'tMul', 'color')}
+  
+  //color.r = (color.r - tLower) * tMul;
+  //color.g = (color.g - tLower) * tMul;
+  //color.b = (color.b - tLower) * tMul;
+  
+  // color.a = dataValue.a*uOpacity;
+  // gl_FragColor = dataValue;
+  gl_FragColor = color;
 }
    `;
   }

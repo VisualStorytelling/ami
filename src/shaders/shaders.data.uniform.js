@@ -148,6 +148,11 @@ export default class ShadersUniform {
         value: 0,
         typeGLSL: 'int',
       },
+      uColormapTexture: {
+        type: 't',
+        value: [],
+        typeGLSL: 'sampler2D',        
+      },
     };
   }
 }

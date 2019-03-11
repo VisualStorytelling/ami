@@ -42,6 +42,7 @@ const helpersMaterialMixin = (three = window.THREE) => {
     _prepareTexture() {
       this._textures = [];
       for (let m = 0; m < this._stack._rawData.length; m++) {
+
         let tex = new three.DataTexture(
           this._stack.rawData[m],
           this._stack.textureSize,
@@ -56,6 +57,7 @@ const helpersMaterialMixin = (three = window.THREE) => {
         );
         tex.needsUpdate = true;
         tex.flipY = true;
+                
         this._textures.push(tex);
       }
     }
