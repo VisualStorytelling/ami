@@ -39,6 +39,8 @@ const helpersVolumeRendering = (three = window.THREE) => {
       this._windowCenter = 0.0;
       this._windowWidth = 1.0;
 
+      this._colorMap = '';
+
       this._create();
     }
 

@@ -29,6 +29,7 @@ const helpersSlice = (three = window.THREE) => {
 
       // private vars
       this._stack = stack;
+      this._segmentationStack = null;
 
       // image settings
       // index only used to grab window/level and intercept/slope
@@ -36,10 +37,13 @@ const helpersSlice = (three = window.THREE) => {
 
       this._lut = 'none';
       this._lutTexture = null;
+      this._colormapTexture = null;
+
       // if auto === true, get from index
       // else from stack which holds the default values
       this._intensityAuto = true;
       this._interpolation = 1; // default to trilinear interpolation
+      
       // starts at 0
       this._index = index;
       this._windowWidth = null;
@@ -75,6 +79,8 @@ const helpersSlice = (three = window.THREE) => {
       this._geometry = null;
       this._mesh = null;
       this._visible = true;
+
+      this._colorMap = 'grayscale';
 
       // update dimensions, center, etc.
       // depending on aaBBSpace
@@ -206,6 +212,24 @@ const helpersSlice = (three = window.THREE) => {
 
     set lutTexture(lutTexture) {
       this._lutTexture = lutTexture;
+      this.updateIntensitySettingsUniforms();
+    }
+
+    get colorMap() {
+      return this._colorMap;
+    }
+
+    set colorMap(colorMapName) {
+      this._colorMap = colorMapName;
+      this._updateMaterial();
+    }
+
+    get colormapTexture() {
+      return this._colormapTexture;
+    }
+
+    set colormapTexture(colormapTexture) {
+      this._colormapTexture = colormapTexture;
       this.updateIntensitySettingsUniforms();
     }
 
@@ -388,6 +412,7 @@ const helpersSlice = (three = window.THREE) => {
         this._uniforms.uSpacing.value = this._spacing;
         this._uniforms.uThickness.value = this._thickness;
         this._uniforms.uThicknessMethod.value = this._thicknessMethod;
+        
         // compute texture if material exist
         this._prepareTexture();
         this._uniforms.uTextureContainer.value = this._textures;
@@ -477,6 +502,9 @@ const helpersSlice = (three = window.THREE) => {
 
       // interpolation
       this._uniforms.uInterpolation.value = this._interpolation;
+
+      // colormap      
+      this._uniforms.uColormapTexture.value = this._colormapTexture;
 
       // lut
       if (this._lut === 'none') {

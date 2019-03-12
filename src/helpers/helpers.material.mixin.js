@@ -13,7 +13,7 @@ const helpersMaterialMixin = (three = window.THREE) => {
   return class extends Constructor {
     _createMaterial(extraOptions) {
       // generate shaders on-demand!
-      let fs = new this._shadersFragment(this._uniforms);
+      let fs = new this._shadersFragment(this._uniforms, this._colorMap);
       let vs = new this._shadersVertex();
 
       // material
@@ -30,7 +30,7 @@ const helpersMaterialMixin = (three = window.THREE) => {
 
     _updateMaterial() {
       // generate shaders on-demand!
-      let fs = new this._shadersFragment(this._uniforms);
+      let fs = new this._shadersFragment(this._uniforms, this._colorMap);
       let vs = new this._shadersVertex();
 
       this._material.vertexShader = vs.compute();
@@ -42,6 +42,7 @@ const helpersMaterialMixin = (three = window.THREE) => {
     _prepareTexture() {
       this._textures = [];
       for (let m = 0; m < this._stack._rawData.length; m++) {
+
         let tex = new three.DataTexture(
           this._stack.rawData[m],
           this._stack.textureSize,
@@ -56,6 +57,7 @@ const helpersMaterialMixin = (three = window.THREE) => {
         );
         tex.needsUpdate = true;
         tex.flipY = true;
+                
         this._textures.push(tex);
       }
     }
