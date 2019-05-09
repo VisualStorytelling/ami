@@ -38,7 +38,7 @@ const widgetsBase = (three = (window as any).THREE) => {
 
   const Constructor = three.Object3D;
   return class extends Constructor {
-    constructor(targetMesh: THREE.Mesh, controls: THREE.OrbitControls, params: WidgetParameter) {
+    constructor(targetMesh: THREE.Mesh, controls: any, params: WidgetParameter) {
       super();
 
       this._widgetType = 'Base';
