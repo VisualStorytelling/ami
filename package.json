@@ -1,6 +1,6 @@
 {
   "name": "ami.js",
-  "version": "0.31.0",
+  "version": "0.32.0",
   "main": "build/ami.js",
   "keywords": [
     "ami",
@@ -129,8 +129,7 @@
     "webpack": "^4.16.3",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.5",
-    "webpack-watch-livereload-plugin": "^0.0.1"
+    "webpack-dev-server": "^3.1.5"
   },
   "engines": {
     "node": ">=6.9.0"
